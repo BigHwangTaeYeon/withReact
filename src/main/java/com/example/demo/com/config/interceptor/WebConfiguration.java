@@ -15,6 +15,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         //위의 코드는 addPathPatterns을 통해 어디에 해당 인터셉터를 적용 시킬지 설정
         //addPathPatterns("/board/**");
         //제외시키고 싶은게 있다면 excludePathPatterns()메서드를 사용
+        System.out.println("WebConfiguration addInterceptors");
     }
 
     @Override
@@ -26,5 +27,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 //        (Cross-Origin Resource Sharing,CORS)란
 //        다른 출처의 자원을 공유할 수 있도록 설정하는 권한 체제
 //        즉, CORS 를 설정하지 않거나 잘못 설정하는 경우, 리소스를 공유하지 못한다.
+        System.out.println("WebConfiguration addCorsMappings");
     }
 }

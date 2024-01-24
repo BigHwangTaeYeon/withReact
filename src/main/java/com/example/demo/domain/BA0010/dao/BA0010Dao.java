@@ -10,8 +10,12 @@ import java.util.List;
 @Repository("BA0010")
 public class BA0010Dao {
 
+    private final SqlSessionTemplate sqlSession;
+
     @Autowired
-    private SqlSessionTemplate sqlSession;
+    public BA0010Dao(SqlSessionTemplate sqlSession) {
+        this.sqlSession = sqlSession;
+    }
 
     public List<BA0010Dto> getApi() throws Exception {
         return sqlSession.selectList("BA0010.getapi");

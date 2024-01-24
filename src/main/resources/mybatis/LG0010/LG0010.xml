@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.example.demo.domain.LG0010.dao.LG0010Dao">
+	<select id="findByUsername" resultType="com.example.demo.domain.LG0010.dto.LG0010Dto">
+		SELECT * FROM member_table WHERE member_id  = #{member_id}
+	</select>
+
+	<select id="findByUsername2" resultType="com.example.demo.domain.LG0010.dto.LG0011Dto">
+		SELECT * FROM member_table WHERE member_id  = #{member_id}
+	</select>
+</mapper>
