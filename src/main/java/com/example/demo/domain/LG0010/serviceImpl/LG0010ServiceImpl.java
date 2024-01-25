@@ -8,18 +8,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service("loginServiceImpl")
 public class LG0010ServiceImpl implements LG0010Service, UserDetailsService {
+
     private final LG0010Dao loginMapper;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public LG0010ServiceImpl(LG0010Dao loginMapper) {
+    public LG0010ServiceImpl(LG0010Dao loginMapper, PasswordEncoder bCryptPasswordEncoder) {
         this.loginMapper = loginMapper;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    public void saveFromLogin(LG0011Dto memberDTO) throws LoginException, NullPointerException{
+        Optional<LG0010Dto> userCheck = Optional.ofNullable(loginMapper.findByUsername(memberDTO.getMember_id()));
+        if(!ObjectUtils.isEmpty(userCheck)){
+            throw new LoginException("아이디를 이미 사용하고 있습니다.");
+        }
+        memberDTO.setMember_password(bCryptPasswordEncoder.encode(memberDTO.getMember_password()));
+//        memberDTO.hashPassword(bCryptPasswordEncoder);
+        loginMapper.saveFromLogin(memberDTO);
     }
 
     @Override
@@ -42,12 +59,11 @@ public class LG0010ServiceImpl implements LG0010Service, UserDetailsService {
             // user가 null인 경우 예외 발생
             throw new LoginException("유저를 찾을 수 없습니다.");
         }
-        // password 암호화
 
         // password check
-        if(!password.equals(user.getMember_password()))
+        if(!bCryptPasswordEncoder.matches(password, user.getMember_password())){
             throw new LoginException("password error");
-
+        }
         return user;
     }
 }

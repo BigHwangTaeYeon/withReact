@@ -1,5 +1,6 @@
 package com.example.demo.com.config.security;
 
+import com.example.demo.com.config.AppConfig;
 import com.example.demo.com.util.jwt.JwtUtils;
 import com.example.demo.domain.LG0010.serviceImpl.LG0010ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    private final LoginServiceImpl loginService;
     private final LG0010ServiceImpl loginService;
 
+    private final AppConfig appConfig;
+
     @Autowired
 //    public SecurityConfig(@Lazy JwtUtils jwtUtils, LoginServiceImpl loginService) {
-    public SecurityConfig(@Lazy JwtUtils jwtUtils, LG0010ServiceImpl loginService) {
+    public SecurityConfig(@Lazy JwtUtils jwtUtils, LG0010ServiceImpl loginService, AppConfig appConfig) {
         this.jwtUtils = jwtUtils;
         this.loginService = loginService;
+        this.appConfig = appConfig;
     }
 
     @Override // HttpSecurity를 사용하여 Web Security 설정을 오버라이드한다.
@@ -55,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(loginService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(loginService).passwordEncoder(appConfig.passwordEncoder());
     }
 
     @Bean // AuthenticationManager Bean을 생성하여 Spring Context에 등록
@@ -64,8 +68,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean(); // 기본 AuthenticationManager Bean을 반환
     }
 
-    @Bean // PasswordEncoder Bean을 생성하여 Spring Context에 등록
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // 비밀번호를 인코딩하는데 사용되는 BCryptPasswordEncoder를 반환
-    }
+    // 순환참조 문제로 AppConfig에 따로 등록해주었다.
+//    @Bean // PasswordEncoder Bean을 생성하여 Spring Context에 등록
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder(); // 비밀번호를 인코딩하는데 사용되는 BCryptPasswordEncoder를 반환
+//    }
 }

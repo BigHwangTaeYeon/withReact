@@ -16,4 +16,9 @@ public interface LG0010Dao {
     LG0010Dto findByUsername(@Param("member_id") String username);
 
     LG0011Dto findByUsername2(@Param("member_id") String username);
+
+    void saveFromLogin(LG0011Dto memberDTO);
+
+    // 게시물 목록 조회
+//    List<BoardDto> selectBoardList(BoardDto bdto);
 }

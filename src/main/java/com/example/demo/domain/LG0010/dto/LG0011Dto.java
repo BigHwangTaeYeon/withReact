@@ -1,6 +1,7 @@
 package com.example.demo.domain.LG0010.dto;
 
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Blob;
 

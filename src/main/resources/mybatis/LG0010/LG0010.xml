@@ -9,4 +9,11 @@
 	<select id="findByUsername2" resultType="com.example.demo.domain.LG0010.dto.LG0011Dto">
 		SELECT * FROM member_table WHERE member_id  = #{member_id}
 	</select>
+
+	<insert id="saveFromLogin" >
+		insert into
+			member_table
+		(member_id, member_password, member_email, member_name, member_nickname, member_introduce, verificationCode)
+		values (#{member_id}, #{member_password}, #{member_email}, #{member_name}, #{member_nickname}, #{member_introduce}, #{verificationCode})
+	</insert>
 </mapper>

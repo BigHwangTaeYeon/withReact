@@ -10,4 +10,6 @@ public interface LG0010Service {
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     LG0011Dto checkLoin(String username, String password) throws LoginException;
+
+    void saveFromLogin(LG0011Dto memberDTO) throws LoginException;
 }

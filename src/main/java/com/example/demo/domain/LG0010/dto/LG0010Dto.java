@@ -21,4 +21,5 @@ public class LG0010Dto {
         this.member_id = memberDTO.getMember_id();
         this.member_password = memberDTO.getMember_password();
     }
+
 }

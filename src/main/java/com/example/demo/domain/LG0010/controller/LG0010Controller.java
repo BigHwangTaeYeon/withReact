@@ -1,6 +1,7 @@
 package com.example.demo.domain.LG0010.controller;
 
 import com.example.demo.com.util.jwt.JwtUtils;
+import com.example.demo.domain.LG0010.dto.LG0010Dto;
 import com.example.demo.domain.LG0010.dto.LG0011Dto;
 import com.example.demo.domain.LG0010.service.LG0010Service;
 import lombok.Getter;
@@ -10,13 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.LoginException;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/login")
 public class LG0010Controller {
     // react와 spring에서 서로 다른 세션을 공통 정보를 가지고 있는 JWT를 통해 가져와 매칭합니다.
     // 개념 https://lms0806.tistory.com/112
@@ -34,7 +36,24 @@ public class LG0010Controller {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostMapping("/login")
+    @PostMapping("/signUp")
+    public ResponseEntity<?> signUp(@RequestBody LG0011Dto memberDTO) {
+        try {
+            loginService.saveFromLogin(memberDTO);
+//            저장
+            return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+        }
+        catch (LoginException e){
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+        catch(Exception e){
+            // 그 외 에러의 경우 500 메세지
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 내부 오류");
+        }
+    }
+
+    @PostMapping("/signIn")
     public ResponseEntity<?> authenticateUser(@RequestBody LG0011Dto memberDTO){
         try {
             // member_id, password 체크
